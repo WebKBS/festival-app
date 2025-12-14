@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/tanstack/tanstack-query";
+import { useAppState } from "@/hooks/useAppState";
 
 // 이 부분은 앱이 로드될 때 스플래시 스크린을 자동으로 숨기지 않도록 설정합니다.
 SplashScreen.preventAutoHideAsync().then().catch(console.error);
@@ -22,6 +23,8 @@ export default function RootLayout() {
       SplashScreen.hideAsync().then().catch(console.error);
     }
   }, [loaded, error]);
+
+  useAppState();
 
   if (!loaded && !error) {
     return null;
