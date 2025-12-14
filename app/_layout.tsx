@@ -34,7 +34,7 @@ export default function RootLayout() {
   }
 
   return (
-    <SQLiteProvider databaseName={"db.db"}>
+    <SQLiteProvider databaseName={"db.db"} options={{ useNewConnection: true }}>
       <QueryClientProvider client={queryClient}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
