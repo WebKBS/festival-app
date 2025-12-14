@@ -1,8 +1,7 @@
-import { Platform, Pressable, View } from "react-native";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNavigation } from "expo-router";
 import { Entypo } from "@expo/vector-icons";
-import { styles } from "@/components/headers/FestivalDetailHeader.styles";
 
 const FestivalDetailHeader = () => {
   const inset = useSafeAreaInsets();
@@ -42,3 +41,13 @@ const FestivalDetailHeader = () => {
 };
 
 export default FestivalDetailHeader;
+
+const styles = StyleSheet.create({
+  container: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 1000,
+    paddingHorizontal: 16,
+  },
+});
