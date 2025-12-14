@@ -16,7 +16,7 @@ const HomeScreenContainer = () => {
   const festivalData =
     data?.pages.flatMap((page) => page.data.items.item) || [];
 
-  console.log("festivalData:", festivalData);
+  // console.log("festivalData:", festivalData);
 
   return (
     <View>
