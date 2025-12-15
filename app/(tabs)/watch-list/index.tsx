@@ -1,25 +1,16 @@
 import { FlatList, StyleSheet, View } from "react-native";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import FestivalCard from "@/components/card/FestivalCard";
-import { Stack } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { db } from "@/db";
 import { watchListTable } from "@/db/schema/watch-list.table";
 import EmptyWatchListCard from "@/components/card/EmptyWatchListCard";
 
 const WatchListScreen = () => {
-  const inset = useSafeAreaInsets();
-
   const { data } = useLiveQuery(db.select().from(watchListTable));
   const isEmpty = (data?.length || 0) === 0;
 
   return (
-    <View style={[styles.container, { paddingTop: inset.top }]}>
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-      />
+    <View style={[styles.container]}>
       <FlatList
         data={data || []}
         keyExtractor={(item) => item.contentId.toString()}
@@ -66,11 +57,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    paddingVertical: 16,
   },
   listContent: {
     paddingHorizontal: 20,
     paddingTop: 12,
-    paddingBottom: 40,
     gap: 16,
   },
   emptyContent: {
