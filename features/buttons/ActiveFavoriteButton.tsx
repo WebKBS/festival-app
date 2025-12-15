@@ -8,7 +8,6 @@ import { db } from "@/db";
 import { watchListTable } from "@/db/schema/watch-list.table";
 import { eq } from "drizzle-orm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { CardItemType } from "@/components/card/FestivalCard";
 import * as Haptics from "expo-haptics";
 
 interface ActiveFavoriteButtonProps {
@@ -34,12 +33,21 @@ const ActiveFavoriteButton = ({
   const { data } = useLiveQuery(favoriteQuery);
   const isFavorite = (data?.length || 0) > 0;
 
-  const toggleFavorite = async (item: CardItemType) => {
+  const toggleFavorite = async () => {
     try {
       if (isFavorite) {
-        await deleteFavorite(item.contentid);
+        await deleteFavorite(contentId);
       } else {
-        await createFavorites(item);
+        await createFavorites({
+          title: festival.title || "",
+          contentid: contentId,
+          addr1: festival.addr1 || "",
+          addr2: festival.addr2 || "",
+          eventstartdate: eventStartDate,
+          eventenddate: eventEndDate,
+          tel: festival.tel || "",
+          firstimage: festival.firstimage || "",
+        });
       }
 
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -73,7 +81,7 @@ const ActiveFavoriteButton = ({
           isFavorite && styles.likedButton,
           { opacity: pressed ? 0.8 : 1 },
         ]}
-        onPress={() => toggleFavorite()}
+        onPress={toggleFavorite}
       >
         <MaterialIcons
           name={isFavorite ? "favorite" : "favorite-border"}

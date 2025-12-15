@@ -1,8 +1,8 @@
-import { Colors } from "@/constants/colors";
-import { Font } from "@/constants/fonts";
 import React from "react";
-import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
+import { Linking, Pressable, View } from "react-native";
 import { WebView } from "react-native-webview";
+import { AppText } from "@/components/text/AppText";
+import { styles } from "@/features/kakao/KaKaoMap.styles";
 
 interface KakaoMapProps {
   latitude: number; // 위도
@@ -18,7 +18,7 @@ const KakaoMap = ({ latitude, longitude, mlevel = 3 }: KakaoMapProps) => {
       <head>
         <meta charset="utf-8" />
         <meta
-          name="viewport"
+          // name="viewport"
           content="width=device-width, initial-scale=1.0, user-scalable=no"
         />
         <style>
@@ -76,44 +76,10 @@ const KakaoMap = ({ latitude, longitude, mlevel = 3 }: KakaoMapProps) => {
           Linking.openURL(url);
         }}
       >
-        <Text style={styles.findButtonText}>길찾기</Text>
+        <AppText style={styles.findButtonText}>길찾기</AppText>
       </Pressable>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: 240, // 원하는 높이로 조정
-    position: "relative",
-  },
-  webview: {
-    width: "100%",
-    height: 240,
-    padding: 0,
-    margin: 0,
-  },
-
-  findButton: {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-    backgroundColor: Colors.blue,
-    padding: 8,
-    borderRadius: 5,
-    elevation: 3, // 안드로이드 그림자
-    shadowColor: "#000", // iOS 그림자
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-
-  findButtonText: {
-    color: "white",
-    fontSize: 14,
-    fontFamily: Font.bold,
-  },
-});
 
 export default KakaoMap;
