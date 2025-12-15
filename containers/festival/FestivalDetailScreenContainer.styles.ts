@@ -139,9 +139,8 @@ export const styles = StyleSheet.create({
 
   cardTitle: {
     fontSize: 18,
-    fontFamily: "Pretendard-Bold",
     color: "#111827",
-    flexShrink: 1,
+    flexShrink: 1, // 긴 제목이 있을 경우 줄바꿈
   },
 
   overviewContainer: {

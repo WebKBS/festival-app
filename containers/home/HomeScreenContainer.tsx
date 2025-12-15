@@ -1,10 +1,11 @@
 import { ActivityIndicator, FlatList, View } from "react-native";
 import { useFestivalInfiniteQuery } from "@/hooks/useFestivalInfiniteQuery";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import LoadingFooter from "@/components/footers/LoadingFooter";
 import { AppText } from "@/components/text/AppText";
 import FestivalCard from "@/components/card/FestivalCard";
 import { styles } from "@/containers/home/HomeScreenContainer.styles";
+import { useScrollToTop } from "@react-navigation/native";
 
 const HomeScreenContainer = () => {
   const {
@@ -17,6 +18,11 @@ const HomeScreenContainer = () => {
     refetch,
     error,
   } = useFestivalInfiniteQuery();
+
+  const listRef = useRef<FlatList>(null);
+
+  // 두번째 클릭시 맨 위로 스크롤
+  useScrollToTop(listRef);
 
   const festivalList =
     festivalData?.pages.flatMap((page) => page.data.items.item) || [];
@@ -58,6 +64,7 @@ const HomeScreenContainer = () => {
 
   return (
     <FlatList
+      ref={listRef}
       data={festivalList}
       keyExtractor={(item, index) => item.contentid + index.toString()}
       renderItem={({ item }) => <FestivalCard festival={item} isColumn />}
