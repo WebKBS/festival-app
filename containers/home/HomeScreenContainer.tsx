@@ -1,8 +1,5 @@
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { useFestivalInfiniteQuery } from "@/hooks/useFestivalInfiniteQuery";
-import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { db } from "@/db";
-import { watchListTable } from "@/db/schema/watch-list.table";
 import { useCallback } from "react";
 import LoadingFooter from "@/components/footers/LoadingFooter";
 import { AppText } from "@/components/text/AppText";
@@ -10,9 +7,6 @@ import FestivalCard from "@/components/card/FestivalCard";
 import { styles } from "@/containers/home/HomeScreenContainer.styles";
 
 const HomeScreenContainer = () => {
-  const { data } = useLiveQuery(db.select().from(watchListTable));
-
-  console.log("dbData:", data);
   const {
     data: festivalData,
     isPending,
