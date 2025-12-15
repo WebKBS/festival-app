@@ -16,11 +16,11 @@ import { blurhash } from "@/constants/images/imageBlur";
 
 export type CardItemType = Pick<
   FestivalTypes,
-  | "contentId"
+  | "contentid"
   | "title"
-  | "firstImage"
-  | "eventStartDate"
-  | "eventEndDate"
+  | "firstimage"
+  | "eventstartdate"
+  | "eventenddate"
   | "addr1"
   | "addr2"
   | "tel"
@@ -39,7 +39,7 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
 
   return (
     <TouchableOpacity
-      key={festival.contentId}
+      key={festival.contentid}
       style={[
         styles.card,
         {
@@ -49,7 +49,7 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
         },
       ]}
       onPress={() => {
-        router.push(`/festival/${festival.contentId}`);
+        router.push(`/festival/${festival.contentid}`);
       }}
       activeOpacity={0.8} // 터치 시 opacity 효과 수치
     >
@@ -57,10 +57,10 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
       <View style={{ ...styles.imageContainer, height: 140 }}>
         <Image
           source={
-            festival.firstImage ? { uri: festival.firstImage } : NO_IMAGE_URI
+            festival.firstimage ? { uri: festival.firstimage } : NO_IMAGE_URI
           }
           style={styles.festivalImage}
-          contentFit={festival.firstImage ? "cover" : "contain"}
+          contentFit={festival.firstimage ? "cover" : "contain"}
           placeholder={{ blurhash }}
         />
         <View style={styles.imageOverlay}>
@@ -68,20 +68,20 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
         </View>
 
         {/* 진행중 상태 표시 */}
-        {festival.eventStartDate && festival.eventEndDate && (
+        {festival.eventstartdate && festival.eventenddate && (
           <View
             style={[
               styles.statusBadge,
               {
                 backgroundColor: getStatusColor(
-                  festival.eventStartDate,
-                  festival.eventEndDate,
+                  festival.eventstartdate,
+                  festival.eventenddate,
                 ),
               },
             ]}
           >
             <Text style={styles.statusText}>
-              {getEventStatus(festival.eventStartDate, festival.eventEndDate)}
+              {getEventStatus(festival.eventstartdate, festival.eventenddate)}
             </Text>
           </View>
         )}
@@ -107,10 +107,10 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
           <View style={styles.infoRow}>
             <Ionicons name="calendar-outline" size={16} color="#666" />
             <View style={styles.innerInfoRow}>
-              {festival.eventStartDate ? (
+              {festival.eventstartdate ? (
                 <Text style={styles.date}>
                   {format(
-                    parse(festival.eventStartDate, "yyyyMMdd", new Date()),
+                    parse(festival.eventstartdate, "yyyyMMdd", new Date()),
                     "yyyy.MM.dd",
                   )}
                 </Text>
@@ -118,10 +118,10 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
                 <Text style={styles.date}>날짜 미정</Text>
               )}
               <Text style={styles.date}>~</Text>
-              {festival.eventEndDate ? (
+              {festival.eventenddate ? (
                 <Text style={styles.date}>
                   {format(
-                    parse(festival.eventEndDate, "yyyyMMdd", new Date()),
+                    parse(festival.eventenddate, "yyyyMMdd", new Date()),
                     "yyyy.MM.dd",
                   )}
                 </Text>

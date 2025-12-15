@@ -4,9 +4,9 @@ import FestivalDetailHeader from "@/components/headers/FestivalDetailHeader";
 
 const FestivalDetailScreen = () => {
   const pathname = usePathname();
-  const contentId = pathname.split("/").pop(); // URL에서 축제 ID 추출
+  const contentid = pathname.split("/").pop(); // URL에서 축제 ID 추출
 
-  if (!contentId) {
+  if (!contentid) {
     return (
       <View style={styles.container}>
         <FestivalDetailHeader />
@@ -22,7 +22,7 @@ const FestivalDetailScreen = () => {
   return (
     <View style={styles.container}>
       <FestivalDetailHeader />
-      {/*<FestivalDetailScreenContainer contentId={contentId} />*/}
+      {/*<FestivalDetailScreenContainer contentid={contentid} />*/}
     </View>
   );
 };

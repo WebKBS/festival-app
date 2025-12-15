@@ -14,117 +14,117 @@ export interface FestivalTypes {
   /**
    * 축제 주소
    */
-  addr1: string | null;
+  addr1: string;
   /**
    * 축제 상세 주소
    */
-  addr2: string | null;
+  addr2: string;
   /**
    * 우편번호
    */
-  zipCode: string | null;
+  zipcode: string;
   /**
    * 대분류
    */
-  cat1: string | null;
+  cat1: string;
   /**
    * 중분류
    */
-  cat2: string | null;
+  cat2: string;
   /**
    * 소분류
    */
-  cat3: string | null;
+  cat3: string;
   /**
    * 콘텐츠 ID
    */
-  contentId: string | null;
+  contentid: string;
   /**
    * 콘텐츠 타입 ID
    */
-  contentTypeId: string | null;
+  contenttypeid: string;
   /**
    * 등록일
    */
-  createdTime: string | null;
+  createdtime: string;
   /**
    * 축제 시작일
    */
-  eventStartDate: string | null;
+  eventstartdate: string;
   /**
    * 축제 종료일
    */
-  eventEndDate: string | null;
+  eventenddate: string;
   /**
    * 대표 이미지 URL - 원본
    */
-  firstImage: string | null;
+  firstimage: string;
   /**
    * 대표 이미지 URL - 썸네일
    */
-  firstImage2: string | null;
+  firstimage2: string;
   /**
    * 저작권 유형 (Type1:제1유형(출처표시-권장), Type3:제3유형(제1유형+변경금지)
    */
-  cpyrhtDivCd: string | null;
+  cpyrhtDivCd: string;
   /**
    * 지도 X 좌표
    */
-  mapX: string | null;
+  mapx: string;
   /**
    * 지도 Y 좌표
    */
-  mapY: string | null;
+  mapy: string;
   /**
    * 지도 레벨
    */
-  mLevel: string | null;
+  mlevel: string;
   /**
    * 수정일
    */
-  modifiedTime: string | null;
+  modifiedtime: string;
   /**
    * 지역 코드
    */
-  areaCode: string | null;
+  areacode: string;
   /**
    * 시군구 코드
    */
-  siGunGuCode: string | null;
+  sigungucode: string;
   /**
    * 전화번호
    */
-  tel: string | null;
+  tel: string;
   /**
    * 축제 제목
    */
-  title: string | null;
+  title: string;
   /**
    * 법정동 시도코드
    */
-  lDongRegnCd: string | null;
+  lDongRegnCd: string;
   /**
    * 법정동 시군구코드
    */
-  lDongSignguCd: string | null;
+  lDongSignguCd: string;
   /**
    * 분류체계 1Depth
    */
-  lclsSystm1: string | null;
+  lclsSystm1: string;
   /**
    * 분류체계 2Depth
    */
-  lclsSystm2: string | null;
+  lclsSystm2: string;
   /**
    * 분류체계 3Depth
    */
-  lclsSystm3: string | null;
+  lclsSystm3: string;
   /**
    * 축제형태(취소,행사연기)
    */
-  progressType: string | null;
+  progresstype: string;
   /**
    * 진행형태(상시,온라인,격년제)
    */
-  festivalType: string | null;
+  festivaltype: string;
 }

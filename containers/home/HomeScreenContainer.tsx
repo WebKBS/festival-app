@@ -72,7 +72,7 @@ const HomeScreenContainer = () => {
   return (
     <FlatList
       data={festivalList}
-      keyExtractor={(item, index) => item.contentId + index.toString()}
+      keyExtractor={(item, index) => item.contentid + index.toString()}
       renderItem={({ item }) => <FestivalCard festival={item} isColumn />}
       numColumns={2}
       columnWrapperStyle={{
