@@ -6,6 +6,7 @@ import { AppText } from "@/components/text/AppText";
 import FestivalCard from "@/components/card/FestivalCard";
 import { styles } from "@/containers/home/HomeScreenContainer.styles";
 import { useScrollToTop } from "@react-navigation/native";
+import OnGoingFestival from "@/containers/home/OnGoingFestival";
 
 const HomeScreenContainer = () => {
   const {
@@ -79,7 +80,7 @@ const HomeScreenContainer = () => {
       refreshing={isPending}
       removeClippedSubviews={false}
       maxToRenderPerBatch={10}
-      // ListHeaderComponent={<OnGoingFestival />}
+      ListHeaderComponent={<OnGoingFestival />}
       ListFooterComponent={() => (
         <LoadingFooter isFetchingNextPage={isFetchingNextPage} />
       )}

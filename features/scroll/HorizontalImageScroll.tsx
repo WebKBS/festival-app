@@ -19,11 +19,17 @@ const HorizontalImageScroll = ({ data, title }: Props) => {
 
   if (!data || data.length === 0) return null;
 
+  const notImageFilterData = data.filter(
+    (item) => item.firstimage || item.firstimage2,
+  );
+
+  if (notImageFilterData.length === 0) return null;
+
   return (
     <View style={styles.container}>
       {title ? <AppText style={styles.sectionTitle}>{title}</AppText> : null}
       <FlatList
-        data={data}
+        data={notImageFilterData}
         horizontal
         keyExtractor={(item, index) =>
           (item.contentid || String(index)) + "-scroll"
