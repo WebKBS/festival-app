@@ -101,4 +101,4 @@ export const REGION_LIST = [
     name: "제주특별자치도",
     shortName: "제주",
   },
-] as const;
+];
