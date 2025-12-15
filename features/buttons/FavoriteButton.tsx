@@ -1,9 +1,11 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useFavoriteStore } from "@/store/useFavorite.store";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
+import { eq } from "drizzle-orm";
 import { CardItemType } from "@/components/card/FestivalCard";
-import { deleteFavorite } from "@/db/favorites/delete";
-import { createFavorites } from "@/db/favorites/create";
+import { createFavorites, deleteFavorite } from "@/db/watch-list";
+import { db } from "@/db";
+import { watchListTable } from "@/db/schema/watch-list.table";
 import * as Haptics from "expo-haptics";
 
 interface FavoriteButtonProps {
@@ -11,36 +13,31 @@ interface FavoriteButtonProps {
 }
 
 const FavoriteButton = ({ festival }: FavoriteButtonProps) => {
-  const favorites = useFavoriteStore((state) => state.favorites);
-  const setFavorites = useFavoriteStore((state) => state.setFavorites);
+  const contentId = Number(festival.contentid);
+
+  const favoriteQuery = db
+    .select()
+    .from(watchListTable)
+    .where(eq(watchListTable.contentId, contentId));
+
+  const { data } = useLiveQuery(favoriteQuery);
+  const isFavorite = (data?.length || 0) > 0;
 
   const toggleFavorite = async (item: CardItemType) => {
-    const newFavorites = new Set(favorites);
-
-    if (newFavorites.has(item.contentid)) {
-      try {
-        // 좋아요 제거
+    try {
+      if (isFavorite) {
         await deleteFavorite(item.contentid);
-
-        newFavorites.delete(item.contentid);
-      } catch (err) {
-        console.error("Error removing favorite:", err);
-        return;
-      }
-    } else {
-      // 좋아요 추가
-
-      try {
+      } else {
         await createFavorites(item);
-        newFavorites.add(item.contentid);
-      } catch (err) {
-        console.error("Error adding favorite:", err);
-        return;
       }
-    }
 
-    setFavorites(newFavorites);
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    } catch (err) {
+      console.error(
+        isFavorite ? "Error removing favorite:" : "Error adding favorite:",
+        err,
+      );
+    }
   };
   return (
     <TouchableOpacity
@@ -48,9 +45,9 @@ const FavoriteButton = ({ festival }: FavoriteButtonProps) => {
       onPress={() => toggleFavorite(festival)}
     >
       <Ionicons
-        name={favorites.has(festival.contentid) ? "heart" : "heart-outline"}
+        name={isFavorite ? "heart" : "heart-outline"}
         size={24}
-        color={favorites.has(festival.contentid) ? "#FF3B30" : "#FFF"}
+        color={isFavorite ? "#FF3B30" : "#FFF"}
       />
     </TouchableOpacity>
   );

@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { telBrReplace } from "@/utils/replace/telBrReplace";
 import { getEventStatus, getStatusColor } from "@/utils/status/eventProgress";
 import { blurhash } from "@/constants/images/imageBlur";
+import FavoriteButton from "@/features/buttons/FavoriteButton";
 
 export type CardItemType = Pick<
   FestivalTypes,
@@ -64,7 +65,7 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
           placeholder={{ blurhash }}
         />
         <View style={styles.imageOverlay}>
-          {/*<FavoriteButton festival={festival} />*/}
+          <FavoriteButton festival={festival} />
         </View>
 
         {/* 진행중 상태 표시 */}
