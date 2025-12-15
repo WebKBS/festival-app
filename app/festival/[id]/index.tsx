@@ -1,12 +1,13 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import FestivalDetailScreenContainer from "@/containers/festival/FestivalDetailScreenContainer";
 import { usePathname } from "expo-router";
 import FestivalDetailHeader from "@/components/headers/FestivalDetailHeader";
 
 const FestivalDetailScreen = () => {
   const pathname = usePathname();
-  const contentid = pathname.split("/").pop(); // URL에서 축제 ID 추출
+  const contentId = pathname.split("/").pop(); // URL에서 축제 ID 추출
 
-  if (!contentid) {
+  if (!contentId) {
     return (
       <View style={styles.container}>
         <FestivalDetailHeader />
@@ -18,11 +19,10 @@ const FestivalDetailScreen = () => {
       </View>
     );
   }
-
   return (
     <View style={styles.container}>
       <FestivalDetailHeader />
-      {/*<FestivalDetailScreenContainer contentid={contentid} />*/}
+      <FestivalDetailScreenContainer contentId={contentId} />
     </View>
   );
 };

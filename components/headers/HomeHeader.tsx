@@ -17,7 +17,7 @@ const HomeHeader = () => {
       <View style={styles.header}>
         <Text style={styles.title}>축제정보</Text>
         <View style={styles.buttonBox}>
-          <Link href={"/"}>
+          <Link href={"/search"}>
             <Feather name="search" size={24} color="black" />
           </Link>
         </View>

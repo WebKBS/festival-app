@@ -14,7 +14,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="index"
         options={{
-          animation: "fade",
+          // animation: "fade",
           title: "축제정보",
           header: () => <HomeHeader />,
           tabBarIcon: ({ color }) => (
@@ -30,7 +30,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="search/index"
         options={{
-          animation: "fade",
+          // animation: "fade",
           headerShown: false,
           title: "검색",
           tabBarIcon: ({ color }) => (
@@ -62,7 +62,7 @@ const TabLayout = () => {
       <Tabs.Screen
         name="watch-list/index"
         options={{
-          animation: "fade",
+          // animation: "fade",
           title: "관심목록",
           tabBarIcon: ({ color }) => (
             <Ionicons name="heart" size={24} color={color} />
