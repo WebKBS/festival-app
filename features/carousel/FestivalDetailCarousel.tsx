@@ -3,7 +3,6 @@ import {
   Animated,
   Dimensions,
   FlatList,
-  Modal,
   Pressable,
   StyleSheet,
   View,
@@ -11,13 +10,13 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { getFestivalDetail } from "@/service/festival/festival-detail";
 import { Image } from "expo-image";
-import { AppText } from "@/components/text/AppText";
+import FestivalDetailImageModal from "@/features/modals/FestivalDetailImageModal";
 
 interface FestivalDetailCarouselProps {
   contentId: string;
 }
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 const ITEM_WIDTH = width;
 export const ITEM_HEIGHT = 420;
 
@@ -66,34 +65,6 @@ const FestivalDetailCarousel = ({ contentId }: FestivalDetailCarouselProps) => {
         </View>
       </Pressable>
     );
-  };
-
-  const renderModalItem = ({ item }: any) => {
-    const uri = item.originimgurl;
-    return (
-      <View style={styles.modalImageContainer}>
-        <Image
-          source={uri ? { uri } : NO_IMAGE_URI}
-          style={styles.fullscreenImage}
-          contentFit="contain"
-        />
-      </View>
-    );
-  };
-
-  const onModalScroll = (event: any) => {
-    const contentOffsetX = event.nativeEvent.contentOffset.x;
-    const currentIndex = Math.round(contentOffsetX / width);
-    setSelectedImageIndex(currentIndex);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-    // 모달 닫을 때 메인 슬라이드를 현재 모달 인덱스와 동기화
-    flatListRef.current?.scrollToIndex({
-      index: selectedImageIndex,
-      animated: false,
-    });
   };
 
   return (
@@ -161,55 +132,15 @@ const FestivalDetailCarousel = ({ contentId }: FestivalDetailCarouselProps) => {
       )}
 
       {/* 확대 이미지 모달 with 슬라이드 */}
-      <Modal visible={isModalVisible} transparent animationType="fade">
-        <View style={styles.modalOverlay}>
-          {/* 닫기 버튼 */}
-          <Pressable style={styles.closeButton} onPress={closeModal}>
-            <AppText style={styles.closeButtonText}>✕</AppText>
-          </Pressable>
-
-          {/* 카운트 표시 */}
-          <View style={styles.countContainer}>
-            <AppText style={styles.countText}>
-              {selectedImageIndex + 1} / {items.length}
-            </AppText>
-          </View>
-
-          {/* 이미지 슬라이더 */}
-          <FlatList
-            ref={modalFlatListRef}
-            data={items}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item) => item.serialnum}
-            renderItem={renderModalItem}
-            onScroll={onModalScroll}
-            scrollEventThrottle={16}
-            getItemLayout={(_, index) => ({
-              length: width,
-              offset: width * index,
-              index,
-            })}
-          />
-
-          {/* 모달 인디케이터 */}
-          <View style={styles.modalIndicatorContainer}>
-            {items.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.modalIndicator,
-                  {
-                    backgroundColor:
-                      index === selectedImageIndex ? "#fff" : "#666",
-                  },
-                ]}
-              />
-            ))}
-          </View>
-        </View>
-      </Modal>
+      <FestivalDetailImageModal
+        isModalVisible={isModalVisible}
+        setModalVisible={setModalVisible}
+        selectedImageIndex={selectedImageIndex}
+        setSelectedImageIndex={setSelectedImageIndex}
+        flatListRef={flatListRef}
+        modalFlatListRef={modalFlatListRef}
+        items={items}
+      />
     </View>
   );
 };
@@ -243,66 +174,5 @@ const styles = StyleSheet.create({
   indicator: {
     height: 4,
     backgroundColor: "#ccc",
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalImageContainer: {
-    width: width,
-    height: height,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  fullscreenImage: {
-    width: "100%",
-    height: "100%",
-  },
-  closeButton: {
-    position: "absolute",
-    top: 50,
-    right: 20,
-    zIndex: 1000,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  closeButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontFamily: "Pretendard-Bold",
-  },
-  countContainer: {
-    position: "absolute",
-    top: 50,
-    left: 20,
-    zIndex: 1000,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 15,
-  },
-  countText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  modalIndicatorContainer: {
-    position: "absolute",
-    bottom: 50,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginHorizontal: 4,
   },
 });
