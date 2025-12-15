@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import { useFestivalInfiniteQuery } from "@/hooks/useFestivalInfiniteQuery";
 import { useCallback } from "react";
 import LoadingFooter from "@/components/footers/LoadingFooter";
@@ -30,7 +30,7 @@ const HomeScreenContainer = () => {
   const renderEmptyComponent = useCallback(
     () => (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>축제 정보가 없습니다.</Text>
+        <AppText style={styles.emptyText}>축제 정보가 없습니다.</AppText>
       </View>
     ),
     [],

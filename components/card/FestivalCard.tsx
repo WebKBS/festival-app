@@ -1,4 +1,4 @@
-import { Dimensions, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 import { FestivalTypes } from "@/types/festival.types";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -9,6 +9,7 @@ import { getEventStatus, getStatusColor } from "@/utils/status/eventProgress";
 import { blurhash } from "@/constants/images/imageBlur";
 import FavoriteButton from "@/features/buttons/FavoriteButton";
 import { styles } from "@/components/card/FestivalCard.styles";
+import { AppText } from "@/components/text/AppText";
 
 export type CardItemType = Pick<
   FestivalTypes,
@@ -76,76 +77,76 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
               },
             ]}
           >
-            <Text style={styles.statusText}>
+            <AppText style={styles.statusText}>
               {getEventStatus(festival.eventstartdate, festival.eventenddate)}
-            </Text>
+            </AppText>
           </View>
         )}
       </View>
 
       <View style={styles.cardContent}>
-        <Text
+        <AppText
           style={styles.title}
           numberOfLines={2}
           lineBreakStrategyIOS={"hangul-word"}
         >
           {festival.title}
-        </Text>
+        </AppText>
 
         <View>
           <View style={styles.infoRow}>
             <Ionicons name="location-outline" size={16} color="#666" />
-            <Text style={styles.location} numberOfLines={1}>
+            <AppText style={styles.location} numberOfLines={1}>
               {festival.addr1} {festival.addr2}
-            </Text>
+            </AppText>
           </View>
 
           <View style={styles.infoRow}>
             <Ionicons name="calendar-outline" size={16} color="#666" />
             <View style={styles.innerInfoRow}>
               {festival.eventstartdate ? (
-                <Text style={styles.date}>
+                <AppText style={styles.date}>
                   {format(
                     parse(festival.eventstartdate, "yyyyMMdd", new Date()),
                     "yyyy.MM.dd",
                   )}
-                </Text>
+                </AppText>
               ) : (
-                <Text style={styles.date}>날짜 미정</Text>
+                <AppText style={styles.date}>날짜 미정</AppText>
               )}
-              <Text style={styles.date}>~</Text>
+              <AppText style={styles.date}>~</AppText>
               {festival.eventenddate ? (
-                <Text style={styles.date}>
+                <AppText style={styles.date}>
                   {format(
                     parse(festival.eventenddate, "yyyyMMdd", new Date()),
                     "yyyy.MM.dd",
                   )}
-                </Text>
+                </AppText>
               ) : (
-                <Text style={styles.date}>날짜 미정</Text>
+                <AppText style={styles.date}>날짜 미정</AppText>
               )}
             </View>
           </View>
           {festival.tel && (
             <View style={styles.infoRow}>
               <Ionicons name="call-outline" size={16} color="#666" />
-              <Text
+              <AppText
                 style={styles.phone}
                 numberOfLines={2}
                 lineBreakStrategyIOS={"hangul-word"}
               >
                 {telBrReplace(festival.tel)}
-              </Text>
+              </AppText>
             </View>
           )}
         </View>
 
         {/*<View style={styles.categoryContainer}>*/}
         {/*  <View style={styles.categoryBadge}>*/}
-        {/*    <Text style={styles.categoryText}>{festival.cat3}</Text>*/}
+        {/*    <AppText style={styles.categoryText}>{festival.cat3}</AppText>*/}
         {/*  </View>*/}
         {/*  <View style={styles.categoryBadge}>*/}
-        {/*    <Text style={styles.categoryText}>{festival.festivaltype}</Text>*/}
+        {/*    <AppText style={styles.categoryText}>{festival.festivaltype}</AppText>*/}
         {/*  </View>*/}
         {/*</View>*/}
       </View>

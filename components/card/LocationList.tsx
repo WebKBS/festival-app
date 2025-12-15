@@ -1,7 +1,8 @@
-import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
+import { Dimensions, Pressable, StyleSheet, View } from "react-native";
 import { Colors } from "@/constants/colors";
 import React from "react";
 import { REGION_LIST } from "@/constants/location/region.const";
+import { AppText } from "@/components/text/AppText";
 
 interface LocationListProps {
   location: string;
@@ -16,7 +17,7 @@ const ITEM_WIDTH = (width - ITEM_MARGIN * 2 * COLUMN_COUNT - 32) / COLUMN_COUNT;
 const LocationList = ({ location, onPress }: LocationListProps) => {
   return (
     <View style={styles.regionContainer}>
-      <Text style={styles.regionLTitle}>지역 선택</Text>
+      <AppText style={styles.regionLTitle}>지역 선택</AppText>
       <View style={styles.regionList}>
         <Pressable
           onPress={() => onPress("ALL")}
@@ -25,7 +26,7 @@ const LocationList = ({ location, onPress }: LocationListProps) => {
             backgroundColor: location === "ALL" ? Colors.blue : "#fff",
           }}
         >
-          <Text
+          <AppText
             style={{
               fontSize: 12,
               color: location === "ALL" ? "#fff" : "#000",
@@ -34,7 +35,7 @@ const LocationList = ({ location, onPress }: LocationListProps) => {
             }}
           >
             전체
-          </Text>
+          </AppText>
         </Pressable>
         {REGION_LIST.map((region) => (
           <Pressable
@@ -45,7 +46,7 @@ const LocationList = ({ location, onPress }: LocationListProps) => {
               backgroundColor: location === region.code ? Colors.blue : "#fff",
             }}
           >
-            <Text
+            <AppText
               style={{
                 fontSize: 12,
                 color: location === region.code ? "#fff" : "#000",
@@ -56,7 +57,7 @@ const LocationList = ({ location, onPress }: LocationListProps) => {
               }}
             >
               {region.shortName}
-            </Text>
+            </AppText>
           </Pressable>
         ))}
       </View>

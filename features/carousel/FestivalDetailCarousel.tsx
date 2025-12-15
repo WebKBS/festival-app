@@ -6,12 +6,12 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { getFestivalDetail } from "@/service/festival/festival-detail";
 import { Image } from "expo-image";
+import { AppText } from "@/components/text/AppText";
 
 interface FestivalDetailCarouselProps {
   contentId: string;
@@ -165,14 +165,14 @@ const FestivalDetailCarousel = ({ contentId }: FestivalDetailCarouselProps) => {
         <View style={styles.modalOverlay}>
           {/* 닫기 버튼 */}
           <Pressable style={styles.closeButton} onPress={closeModal}>
-            <Text style={styles.closeButtonText}>✕</Text>
+            <AppText style={styles.closeButtonText}>✕</AppText>
           </Pressable>
 
           {/* 카운트 표시 */}
           <View style={styles.countContainer}>
-            <Text style={styles.countText}>
+            <AppText style={styles.countText}>
               {selectedImageIndex + 1} / {items.length}
-            </Text>
+            </AppText>
           </View>
 
           {/* 이미지 슬라이더 */}

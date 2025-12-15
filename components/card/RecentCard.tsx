@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+import { AppText } from "@/components/text/AppText";
 
 interface RecentCardProps {
   recent: string[];
@@ -8,17 +9,17 @@ interface RecentCardProps {
 const RecentCard = ({ recent, onPress, onDelete }: RecentCardProps) => {
   return (
     <View style={styles.recentSearchContainer}>
-      <Text style={styles.sectionTitle}>최근 검색어</Text>
+      <AppText style={styles.sectionTitle}>최근 검색어</AppText>
       {recent.length === 0 ? (
-        <Text style={styles.emptyText}>최근 검색어가 없습니다.</Text>
+        <AppText style={styles.emptyText}>최근 검색어가 없습니다.</AppText>
       ) : (
         recent.slice(0, 8).map((term) => (
           <View key={term} style={styles.recentRow}>
             <Pressable onPress={() => onPress(term)} style={{ flex: 1 }}>
-              <Text style={styles.recentText}>{term}</Text>
+              <AppText style={styles.recentText}>{term}</AppText>
             </Pressable>
             <Pressable onPress={() => onDelete(term)}>
-              <Text style={styles.deleteText}>삭제</Text>
+              <AppText style={styles.deleteText}>삭제</AppText>
             </Pressable>
           </View>
         ))

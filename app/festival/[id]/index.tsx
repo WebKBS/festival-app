@@ -1,7 +1,8 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import FestivalDetailScreenContainer from "@/containers/festival/FestivalDetailScreenContainer";
 import { usePathname } from "expo-router";
 import FestivalDetailHeader from "@/components/headers/FestivalDetailHeader";
+import { AppText } from "@/components/text/AppText";
 
 const FestivalDetailScreen = () => {
   const pathname = usePathname();
@@ -13,7 +14,7 @@ const FestivalDetailScreen = () => {
         <FestivalDetailHeader />
         <ScrollView style={styles.scrollView}>
           <View style={{ padding: 20 }}>
-            <Text>상세 내용이 없습니다.</Text>
+            <AppText>상세 내용이 없습니다.</AppText>
           </View>
         </ScrollView>
       </View>

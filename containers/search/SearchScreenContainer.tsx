@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   FlatList,
   Keyboard,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -19,6 +18,7 @@ import LoadingFooter from "@/components/footers/LoadingFooter";
 import { Colors } from "@/constants/colors";
 import { useSearchFestivalInfiniteQuery } from "@/hooks/useSearchFestivalInfiniteQuery";
 import { styles } from "@/containers/search/SearchScreenContainer.styles";
+import { AppText } from "@/components/text/AppText";
 
 const STORAGE_KEY = "RECENT_SEARCHES";
 const MAX_RECENT = 10;
@@ -209,16 +209,16 @@ const SearchScreenContainer = () => {
                         />
                       </View>
                       <View style={styles.titleBox}>
-                        <Text style={styles.listTitle} numberOfLines={2}>
+                        <AppText style={styles.listTitle} numberOfLines={2}>
                           {item.title}
-                        </Text>
-                        <Text
+                        </AppText>
+                        <AppText
                           style={styles.listAddr}
                           numberOfLines={2}
                           lineBreakStrategyIOS={"hangul-word"}
                         >
                           {item.addr1} {item.addr2}
-                        </Text>
+                        </AppText>
                       </View>
                     </View>
                   </Link>
@@ -248,7 +248,7 @@ const SearchScreenContainer = () => {
                   </View>
                 ) : (
                   <View>
-                    <Text>검색 결과가 없습니다.</Text>
+                    <AppText>검색 결과가 없습니다.</AppText>
                   </View>
                 )
               }
