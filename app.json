@@ -12,6 +12,9 @@
       "bundleIdentifier": "com.kang-beomsu.festivalapp",
       "supportsTablet": true,
       "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        },
         "ITSAppUsesNonExemptEncryption": false
       }
     },
