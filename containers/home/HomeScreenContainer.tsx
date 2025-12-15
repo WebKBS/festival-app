@@ -1,10 +1,4 @@
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import { useFestivalInfiniteQuery } from "@/hooks/useFestivalInfiniteQuery";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { db } from "@/db";
@@ -13,6 +7,7 @@ import { useCallback } from "react";
 import LoadingFooter from "@/components/footers/LoadingFooter";
 import { AppText } from "@/components/text/AppText";
 import FestivalCard from "@/components/card/FestivalCard";
+import { styles } from "@/containers/home/HomeScreenContainer.styles";
 
 const HomeScreenContainer = () => {
   const { data } = useLiveQuery(db.select().from(watchListTable));
@@ -31,8 +26,6 @@ const HomeScreenContainer = () => {
 
   const festivalList =
     festivalData?.pages.flatMap((page) => page.data.items.item) || [];
-
-  console.log("festivalList:", festivalList);
 
   const handleLoadMore = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) {
@@ -95,23 +88,3 @@ const HomeScreenContainer = () => {
 };
 
 export default HomeScreenContainer;
-
-const styles = StyleSheet.create({
-  pendingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 60,
-  },
-
-  emptyText: {
-    fontSize: 16,
-    color: "#666",
-  },
-});
