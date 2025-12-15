@@ -1,0 +1,117 @@
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { useFestivalInfiniteQuery } from "@/hooks/useFestivalInfiniteQuery";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
+import { db } from "@/db";
+import { watchListTable } from "@/db/schema/watch-list.table";
+import { useCallback } from "react";
+import LoadingFooter from "@/components/footers/LoadingFooter";
+import { AppText } from "@/components/text/AppText";
+import FestivalCard from "@/components/card/FestivalCard";
+
+const HomeScreenContainer = () => {
+  const { data } = useLiveQuery(db.select().from(watchListTable));
+
+  console.log("dbData:", data);
+  const {
+    data: festivalData,
+    isPending,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+    error,
+  } = useFestivalInfiniteQuery();
+
+  const festivalList =
+    festivalData?.pages.flatMap((page) => page.data.items.item) || [];
+
+  console.log("festivalList:", festivalList);
+
+  const handleLoadMore = useCallback(() => {
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const renderEmptyComponent = useCallback(
+    () => (
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyText}>축제 정보가 없습니다.</Text>
+      </View>
+    ),
+    [],
+  );
+
+  if (isPending) {
+    return (
+      <View style={styles.pendingContainer}>
+        <ActivityIndicator size="small" color="#007AFF" />
+      </View>
+    );
+  }
+
+  if (isError) {
+    return (
+      <View style={styles.pendingContainer}>
+        <AppText>
+          {error instanceof Error
+            ? error.message
+            : "축제 정보를 불러오는 데 실패했습니다."}
+        </AppText>
+      </View>
+    );
+  }
+
+  return (
+    <FlatList
+      data={festivalList}
+      keyExtractor={(item, index) => item.contentid + index.toString()}
+      renderItem={({ item }) => <FestivalCard festival={item} isColumn />}
+      numColumns={2}
+      columnWrapperStyle={{
+        justifyContent: "space-between",
+        marginHorizontal: 16,
+      }}
+      onEndReached={handleLoadMore}
+      onEndReachedThreshold={0.5}
+      onRefresh={refetch}
+      refreshing={isPending}
+      removeClippedSubviews={false}
+      maxToRenderPerBatch={10}
+      // ListHeaderComponent={<OnGoingFestival />}
+      ListFooterComponent={() => (
+        <LoadingFooter isFetchingNextPage={isFetchingNextPage} />
+      )}
+      ListEmptyComponent={renderEmptyComponent}
+    />
+  );
+};
+
+export default HomeScreenContainer;
+
+const styles = StyleSheet.create({
+  pendingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 60,
+  },
+
+  emptyText: {
+    fontSize: 16,
+    color: "#666",
+  },
+});
