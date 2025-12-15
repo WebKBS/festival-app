@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   FlatList,
   Keyboard,
-  StyleSheet,
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -11,8 +10,6 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Link, useNavigation } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { getFestivalSearch } from "@/service/festival/festival-search";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import SearchHeader from "@/components/headers/SearchHeader";
 import RecentCard from "@/components/card/RecentCard";
@@ -20,6 +17,8 @@ import LocationList from "@/components/card/LocationList";
 import { Image } from "expo-image";
 import LoadingFooter from "@/components/footers/LoadingFooter";
 import { Colors } from "@/constants/colors";
+import { useSearchFestivalInfiniteQuery } from "@/hooks/useSearchFestivalInfiniteQuery";
+import { styles } from "@/containers/search/SearchScreenContainer.styles";
 
 const STORAGE_KEY = "RECENT_SEARCHES";
 const MAX_RECENT = 10;
@@ -34,13 +33,13 @@ const SearchScreenContainer = () => {
   const [keyword, setKeyword] = useState("");
   const [recent, setRecent] = useState<string[]>([]);
 
-  const [location, setLocation] = useState<string | "ALL">("ALL");
-
   // 제출된 검색 상태 (확인 버튼 누른 후에만 변경)
   const [submittedKeyword, setSubmittedKeyword] = useState("");
   const [submittedLocation, setSubmittedLocation] = useState<string | "ALL">(
     "ALL",
   );
+
+  const [location, setLocation] = useState<string | "ALL">("ALL");
 
   const {
     data,
@@ -50,47 +49,9 @@ const SearchScreenContainer = () => {
     refetch,
     isLoading,
     isFetching,
-  } = useInfiniteQuery({
-    queryKey: ["festivalSearch", submittedKeyword, submittedLocation],
-    queryFn: ({ pageParam }) =>
-      getFestivalSearch({
-        pageParam,
-        keyword: submittedKeyword,
-        areaCode: submittedLocation === "ALL" ? "" : submittedLocation,
-        sigunguCode: "",
-        arrange: "D", // 기본값: 생성일순
-        size: 20,
-      }),
-    initialPageParam: 1,
-    // enabled: submittedKeyword.trim().length > 0 || submittedLocation !== "ALL",
-    getNextPageParam: (lastPage, allPages) => {
-      const currentPage = lastPage.data.pageNo;
-      const totalCount = lastPage.data.totalCount;
-      const pageSize = lastPage.data.numOfRows;
-      const currentItems = lastPage.data.items?.item?.length || 0;
-
-      // 지금까지 로드된 총 아이템 수 계산
-      const loadedItemsCount = allPages.reduce((total, page) => {
-        return total + (page.data.items?.item?.length || 0);
-      }, 0);
-
-      // 전체 데이터 로드 완료
-      if (loadedItemsCount >= totalCount) {
-        return undefined;
-      }
-
-      // 현재 페이지의 아이템 수가 요청한 size보다 적으면 마지막 페이지
-      if (currentItems < pageSize && currentItems > 0) {
-        return undefined;
-      }
-
-      // 아이템이 아예 없으면 중단
-      if (currentItems === 0) {
-        return undefined;
-      }
-
-      return currentPage + 1;
-    },
+  } = useSearchFestivalInfiniteQuery({
+    submittedKeyword,
+    submittedLocation,
   });
 
   const festivalData =
@@ -300,67 +261,3 @@ const SearchScreenContainer = () => {
 };
 
 export default SearchScreenContainer;
-
-const styles = StyleSheet.create({
-  infoCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    gap: 120,
-  },
-
-  titleBox: {
-    flex: 1,
-    flexDirection: "column",
-    gap: 6,
-  },
-
-  listItem: {
-    paddingVertical: 0,
-    marginBottom: 12,
-  },
-
-  card: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    padding: 12,
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    // iOS shadow
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    // Android elevation
-    elevation: 2,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#f2f2f2",
-  },
-
-  listTitle: {
-    fontSize: 16,
-    fontFamily: "Pretendard-Bold",
-  },
-  listAddr: {
-    color: "#666",
-    fontSize: 13,
-    marginTop: 2,
-    fontFamily: "Pretendard-Regular",
-    lineHeight: 18,
-  },
-
-  imageBox: {
-    width: 96,
-    height: 96,
-    borderRadius: 10,
-    overflow: "hidden",
-    backgroundColor: "#f0f0f0",
-  },
-
-  emptyCenter: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
