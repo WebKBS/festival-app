@@ -30,6 +30,24 @@ const ZoomableImage = ({
   const initialDistance = useRef(0);
 
   const panValue = useRef({ x: 0, y: 0 });
+  const lastTap = useRef(0);
+
+  const resetZoom = () => {
+    Animated.parallel([
+      Animated.spring(scale, { toValue: 1, useNativeDriver: false }),
+      Animated.spring(pan, {
+        toValue: { x: 0, y: 0 },
+        useNativeDriver: false,
+      }),
+    ]).start();
+
+    baseScale.current = 1;
+    pinchScale.current = 1;
+    lastScale.current = 1;
+    panValue.current = { x: 0, y: 0 };
+    initialDistance.current = 0;
+    onZoomStatusChange(false);
+  };
 
   // 두 손가락 거리 계산 함수
   const calcDistance = (event: GestureResponderEvent) => {
@@ -48,6 +66,18 @@ const ZoomableImage = ({
 
       // 터치 시작
       onPanResponderGrant: (event) => {
+        const now = Date.now();
+
+        // 단일 터치 더블 탭 감지: 확대 상태 초기화
+        if (
+          event.nativeEvent.touches.length === 1 &&
+          now - lastTap.current < 300
+        ) {
+          resetZoom();
+          return;
+        }
+        lastTap.current = now;
+
         if (event.nativeEvent.touches.length === 2) {
           // 핀치 줌 시작: 초기 거리 저장
           initialDistance.current = calcDistance(event);
@@ -102,17 +132,7 @@ const ZoomableImage = ({
 
         if (lastScale.current < 1.1) {
           // 크기가 거의 1배율로 돌아왔으면 초기화
-          Animated.parallel([
-            Animated.spring(scale, { toValue: 1, useNativeDriver: false }),
-            Animated.spring(pan, {
-              toValue: { x: 0, y: 0 },
-              useNativeDriver: false,
-            }),
-          ]).start();
-
-          baseScale.current = 1;
-          lastScale.current = 1;
-          onZoomStatusChange(false); // 부모 스크롤 잠금 해제
+          resetZoom();
         } else {
           // 확대 상태 유지
           baseScale.current = lastScale.current;
