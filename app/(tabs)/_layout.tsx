@@ -3,6 +3,7 @@ import { Colors } from "@/constants/colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { Tabs } from "expo-router";
+import WatchListHeader from "@/components/headers/WatchListHeader";
 
 const TabLayout = () => {
   return (
@@ -64,11 +65,10 @@ const TabLayout = () => {
         options={{
           // animation: "fade",
           title: "관심목록",
+          header: () => <WatchListHeader />,
           tabBarIcon: ({ color }) => (
             <Ionicons name="heart" size={24} color={color} />
           ),
-          // header 왼쪽 정렬
-          headerTitleAlign: "left",
         }}
         listeners={() => ({
           tabPress: async () => {
