@@ -73,23 +73,12 @@ const ActiveFavoriteButton = ({
           isFavorite && styles.likedButton,
           { opacity: pressed ? 0.8 : 1 },
         ]}
-        onPress={() =>
-          toggleFavorite({
-            contentid: Number(contentId),
-            title: festival.title,
-            firstimage: festival.firstimage,
-            eventstartdate: eventStartDate,
-            eventenddate: eventEndDate,
-            addr1: festival.addr1,
-            addr2: festival.addr2,
-            tel: festival.tel || "",
-          })
-        }
+        onPress={() => toggleFavorite()}
       >
         <MaterialIcons
-          name={isLiked ? "favorite" : "favorite-border"}
+          name={isFavorite ? "favorite" : "favorite-border"}
           size={22}
-          color={isLiked ? "#FF3B30" : "#a1a1a1"}
+          color={isFavorite ? "#FF3B30" : "#a1a1a1"}
         />
       </HapticsButton>
     </Animated.View>
