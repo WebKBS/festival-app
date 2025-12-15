@@ -1,20 +1,15 @@
 import React, { memo } from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { FestivalTypes } from "@/types/festival.types";
 import { blurhash } from "@/constants/images/imageBlur";
+import { AppText } from "@/components/text/AppText";
 
 interface Props {
   data: Pick<
     FestivalTypes,
-    "contentid" | "title" | "firstImage" | "firstImage2"
+    "contentid" | "title" | "firstimage" | "firstimage2"
   >[];
   title?: string;
 }
@@ -26,7 +21,7 @@ const HorizontalImageScroll = ({ data, title }: Props) => {
 
   return (
     <View style={styles.container}>
-      {title ? <Text style={styles.sectionTitle}>{title}</Text> : null}
+      {title ? <AppText style={styles.sectionTitle}>{title}</AppText> : null}
       <FlatList
         data={data}
         horizontal
@@ -36,7 +31,7 @@ const HorizontalImageScroll = ({ data, title }: Props) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => {
-          const img = item.firstImage || item.firstImage2;
+          const img = item.firstimage || item.firstimage2;
           return (
             <TouchableOpacity
               activeOpacity={0.8}
@@ -57,9 +52,9 @@ const HorizontalImageScroll = ({ data, title }: Props) => {
                 transition={200}
               />
               {!!item.title && (
-                <Text numberOfLines={1} style={styles.caption}>
+                <AppText numberOfLines={1} style={styles.caption}>
                   {item.title}
-                </Text>
+                </AppText>
               )}
             </TouchableOpacity>
           );

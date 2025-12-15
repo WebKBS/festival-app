@@ -1,10 +1,4 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 import { FestivalTypes } from "@/types/festival.types";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,6 +8,8 @@ import { telBrReplace } from "@/utils/replace/telBrReplace";
 import { getEventStatus, getStatusColor } from "@/utils/status/eventProgress";
 import { blurhash } from "@/constants/images/imageBlur";
 import FavoriteButton from "@/features/buttons/FavoriteButton";
+import { styles } from "@/components/card/FestivalCard.styles";
+import { AppText } from "@/components/text/AppText";
 
 export type CardItemType = Pick<
   FestivalTypes,
@@ -81,76 +77,76 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
               },
             ]}
           >
-            <Text style={styles.statusText}>
+            <AppText style={styles.statusText}>
               {getEventStatus(festival.eventstartdate, festival.eventenddate)}
-            </Text>
+            </AppText>
           </View>
         )}
       </View>
 
       <View style={styles.cardContent}>
-        <Text
+        <AppText
           style={styles.title}
           numberOfLines={2}
           lineBreakStrategyIOS={"hangul-word"}
         >
           {festival.title}
-        </Text>
+        </AppText>
 
         <View>
           <View style={styles.infoRow}>
             <Ionicons name="location-outline" size={16} color="#666" />
-            <Text style={styles.location} numberOfLines={1}>
+            <AppText style={styles.location} numberOfLines={1}>
               {festival.addr1} {festival.addr2}
-            </Text>
+            </AppText>
           </View>
 
           <View style={styles.infoRow}>
             <Ionicons name="calendar-outline" size={16} color="#666" />
             <View style={styles.innerInfoRow}>
               {festival.eventstartdate ? (
-                <Text style={styles.date}>
+                <AppText style={styles.date}>
                   {format(
                     parse(festival.eventstartdate, "yyyyMMdd", new Date()),
                     "yyyy.MM.dd",
                   )}
-                </Text>
+                </AppText>
               ) : (
-                <Text style={styles.date}>날짜 미정</Text>
+                <AppText style={styles.date}>날짜 미정</AppText>
               )}
-              <Text style={styles.date}>~</Text>
+              <AppText style={styles.date}>~</AppText>
               {festival.eventenddate ? (
-                <Text style={styles.date}>
+                <AppText style={styles.date}>
                   {format(
                     parse(festival.eventenddate, "yyyyMMdd", new Date()),
                     "yyyy.MM.dd",
                   )}
-                </Text>
+                </AppText>
               ) : (
-                <Text style={styles.date}>날짜 미정</Text>
+                <AppText style={styles.date}>날짜 미정</AppText>
               )}
             </View>
           </View>
           {festival.tel && (
             <View style={styles.infoRow}>
               <Ionicons name="call-outline" size={16} color="#666" />
-              <Text
+              <AppText
                 style={styles.phone}
                 numberOfLines={2}
                 lineBreakStrategyIOS={"hangul-word"}
               >
                 {telBrReplace(festival.tel)}
-              </Text>
+              </AppText>
             </View>
           )}
         </View>
 
         {/*<View style={styles.categoryContainer}>*/}
         {/*  <View style={styles.categoryBadge}>*/}
-        {/*    <Text style={styles.categoryText}>{festival.cat3}</Text>*/}
+        {/*    <AppText style={styles.categoryText}>{festival.cat3}</AppText>*/}
         {/*  </View>*/}
         {/*  <View style={styles.categoryBadge}>*/}
-        {/*    <Text style={styles.categoryText}>{festival.festivaltype}</Text>*/}
+        {/*    <AppText style={styles.categoryText}>{festival.festivaltype}</AppText>*/}
         {/*  </View>*/}
         {/*</View>*/}
       </View>
@@ -159,116 +155,3 @@ const FestivalCard = ({ festival, isColumn }: FestivalCardProps) => {
 };
 
 export default FestivalCard;
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: "#FFF",
-    marginBottom: 16,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-
-  imageContainer: {
-    position: "relative",
-    borderTopRightRadius: 8,
-    borderTopLeftRadius: 8,
-    overflow: "hidden",
-    height: 200,
-  },
-
-  festivalImage: {
-    width: "100%",
-    height: "100%",
-  },
-
-  imageOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-  },
-
-  statusText: {
-    color: "#FFF",
-    fontSize: 12,
-    fontFamily: "Pretendard-SemiBold",
-  },
-
-  cardContent: {
-    padding: 12,
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
-
-  statusBadge: {
-    position: "absolute",
-    top: 8,
-    left: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-
-  title: {
-    fontSize: 18,
-    fontFamily: "Pretendard-Bold",
-    color: "#333",
-    marginBottom: 12,
-    lineHeight: 24,
-    flexWrap: "wrap",
-  },
-  infoRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 1,
-    marginBottom: 8,
-  },
-
-  innerInfoRow: {
-    flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-
-  location: {
-    fontSize: 14,
-    color: "#666",
-    marginLeft: 8,
-    flex: 1,
-  },
-  date: {
-    fontSize: 14,
-    color: "#666",
-    marginLeft: 8,
-  },
-  phone: {
-    fontSize: 14,
-    color: "#666",
-    marginLeft: 8,
-  },
-  categoryContainer: {
-    flexDirection: "row",
-    marginTop: 12,
-    flexWrap: "wrap",
-  },
-  categoryBadge: {
-    backgroundColor: "#E3F2FD",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginRight: 8,
-    marginBottom: 4,
-  },
-  categoryText: {
-    fontSize: 12,
-    color: "#1976D2",
-    fontWeight: "500",
-  },
-});

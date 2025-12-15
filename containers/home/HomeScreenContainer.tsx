@@ -1,23 +1,12 @@
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { ActivityIndicator, FlatList, View } from "react-native";
 import { useFestivalInfiniteQuery } from "@/hooks/useFestivalInfiniteQuery";
-import { useLiveQuery } from "drizzle-orm/expo-sqlite";
-import { db } from "@/db";
-import { watchListTable } from "@/db/schema/watch-list.table";
 import { useCallback } from "react";
 import LoadingFooter from "@/components/footers/LoadingFooter";
 import { AppText } from "@/components/text/AppText";
 import FestivalCard from "@/components/card/FestivalCard";
+import { styles } from "@/containers/home/HomeScreenContainer.styles";
 
 const HomeScreenContainer = () => {
-  const { data } = useLiveQuery(db.select().from(watchListTable));
-
-  console.log("dbData:", data);
   const {
     data: festivalData,
     isPending,
@@ -32,8 +21,6 @@ const HomeScreenContainer = () => {
   const festivalList =
     festivalData?.pages.flatMap((page) => page.data.items.item) || [];
 
-  console.log("festivalList:", festivalList);
-
   const handleLoadMore = useCallback(() => {
     if (hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
@@ -43,7 +30,7 @@ const HomeScreenContainer = () => {
   const renderEmptyComponent = useCallback(
     () => (
       <View style={styles.emptyContainer}>
-        <Text style={styles.emptyText}>축제 정보가 없습니다.</Text>
+        <AppText style={styles.emptyText}>축제 정보가 없습니다.</AppText>
       </View>
     ),
     [],
@@ -95,23 +82,3 @@ const HomeScreenContainer = () => {
 };
 
 export default HomeScreenContainer;
-
-const styles = StyleSheet.create({
-  pendingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  emptyContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingTop: 60,
-  },
-
-  emptyText: {
-    fontSize: 16,
-    color: "#666",
-  },
-});

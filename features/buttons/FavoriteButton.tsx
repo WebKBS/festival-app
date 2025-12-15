@@ -2,6 +2,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { eq } from "drizzle-orm";
+import { useMemo } from "react";
 import { CardItemType } from "@/components/card/FestivalCard";
 import { createFavorites, deleteFavorite } from "@/db/watch-list";
 import { db } from "@/db";
@@ -13,17 +14,28 @@ interface FavoriteButtonProps {
 }
 
 const FavoriteButton = ({ festival }: FavoriteButtonProps) => {
-  const contentId = Number(festival.contentid);
+  const contentId = useMemo(
+    () => Number(festival.contentid),
+    [festival.contentid],
+  );
+  const isValidContentId = Number.isFinite(contentId);
+  const queryContentId = isValidContentId ? contentId : -1;
 
-  const favoriteQuery = db
-    .select()
-    .from(watchListTable)
-    .where(eq(watchListTable.contentId, contentId));
+  const favoriteQuery = useMemo(
+    () =>
+      db
+        .select()
+        .from(watchListTable)
+        .where(eq(watchListTable.contentId, queryContentId)),
+    [queryContentId],
+  );
 
   const { data } = useLiveQuery(favoriteQuery);
-  const isFavorite = (data?.length || 0) > 0;
+  const isFavorite = isValidContentId && (data?.length || 0) > 0;
 
   const toggleFavorite = async (item: CardItemType) => {
+    if (!isValidContentId) return;
+
     try {
       if (isFavorite) {
         await deleteFavorite(item.contentid);
