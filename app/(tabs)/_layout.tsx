@@ -67,6 +67,8 @@ const TabLayout = () => {
           tabBarIcon: ({ color }) => (
             <Ionicons name="heart" size={24} color={color} />
           ),
+          // header 왼쪽 정렬
+          headerTitleAlign: "left",
         }}
         listeners={() => ({
           tabPress: async () => {
