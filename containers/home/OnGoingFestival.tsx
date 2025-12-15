@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFestivals } from "@/service/festival/festival";
 import HorizontalImageScroll from "@/features/scroll/HorizontalImageScroll";
+import OngoingSquareSlider from "@/features/slider/OngoingSquareSlider";
 
 const OnGoingFestival = () => {
   const eventStartDate = format(new Date(), "yyyyMMdd");
@@ -16,12 +17,15 @@ const OnGoingFestival = () => {
   const ongoingFestivals = data?.data.items?.item || [];
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titleCard}>
-        <Text style={styles.title}>🎉 진행중인 축제</Text>
+    <>
+      <View style={styles.container}>
+        <OngoingSquareSlider data={ongoingFestivals} />
+        <View style={styles.titleCard}>
+          <Text style={styles.title}>🎉 진행중인 축제</Text>
+        </View>
+        <HorizontalImageScroll data={ongoingFestivals} />
       </View>
-      <HorizontalImageScroll data={ongoingFestivals} />
-    </View>
+    </>
   );
 };
 
