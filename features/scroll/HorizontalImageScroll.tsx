@@ -14,7 +14,7 @@ import { blurhash } from "@/constants/images/imageBlur";
 interface Props {
   data: Pick<
     FestivalTypes,
-    "contentid" | "title" | "firstImage" | "firstImage2"
+    "contentid" | "title" | "firstimage" | "firstimage2"
   >[];
   title?: string;
 }
@@ -36,7 +36,7 @@ const HorizontalImageScroll = ({ data, title }: Props) => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => {
-          const img = item.firstImage || item.firstImage2;
+          const img = item.firstimage || item.firstimage2;
           return (
             <TouchableOpacity
               activeOpacity={0.8}
