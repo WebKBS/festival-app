@@ -141,6 +141,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "Pretendard-Bold",
     color: "#111827",
+    flexShrink: 1,
   },
 
   overviewContainer: {
