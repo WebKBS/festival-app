@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { eq } from "drizzle-orm";
-import { useMemo } from "react";
+import { startTransition, useMemo, useOptimistic } from "react";
 import { CardItemType } from "@/components/card/FestivalCard";
 import { createFavorites, deleteFavorite } from "@/db/watch-list";
 import { db } from "@/db";
@@ -18,6 +18,7 @@ const FavoriteButton = ({ festival }: FavoriteButtonProps) => {
     () => Number(festival.contentid),
     [festival.contentid],
   );
+
   const isValidContentId = Number.isFinite(contentId);
   const queryContentId = isValidContentId ? contentId : -1;
 
@@ -33,33 +34,45 @@ const FavoriteButton = ({ festival }: FavoriteButtonProps) => {
   const { data } = useLiveQuery(favoriteQuery);
   const isFavorite = isValidContentId && (data?.length || 0) > 0;
 
+  const [optimisticFavorite, setOptimisticFavorite] = useOptimistic(
+    isFavorite,
+    (_, next: boolean) => next,
+  );
+
   const toggleFavorite = async (item: CardItemType) => {
     if (!isValidContentId) return;
 
+    const nextState = !optimisticFavorite;
+
+    startTransition(() => {
+      setOptimisticFavorite(nextState);
+    });
+
     try {
-      if (isFavorite) {
-        await deleteFavorite(item.contentid);
-      } else {
+      if (nextState) {
         await createFavorites(item);
+      } else {
+        await deleteFavorite(item.contentid);
       }
 
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     } catch (err) {
       console.error(
-        isFavorite ? "Error removing favorite:" : "Error adding favorite:",
+        nextState ? "Error adding favorite:" : "Error removing favorite:",
         err,
       );
     }
   };
+
   return (
     <TouchableOpacity
       style={styles.favoriteButton}
       onPress={() => toggleFavorite(festival)}
     >
       <Ionicons
-        name={isFavorite ? "heart" : "heart-outline"}
+        name={optimisticFavorite ? "heart" : "heart-outline"}
         size={24}
-        color={isFavorite ? "#FF3B30" : "#FFF"}
+        color={optimisticFavorite ? "#FF3B30" : "#FFF"}
       />
     </TouchableOpacity>
   );
