@@ -58,6 +58,7 @@ const ActiveFavoriteButton = ({
           tel: festival.tel || "",
           firstimage: festival.firstimage || "",
         });
+      } else {
         await deleteFavorite(contentId);
       }
 
@@ -66,7 +67,6 @@ const ActiveFavoriteButton = ({
       console.error("Favorite toggle failed:", error);
     }
 
-    // 애니메이션 효과
     Animated.sequence([
       Animated.timing(scaleAnim, {
         toValue: 1.2,
