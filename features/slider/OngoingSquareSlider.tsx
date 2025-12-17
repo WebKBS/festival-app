@@ -126,9 +126,10 @@ const OngoingSquareSlider = ({ data }: Props) => {
                         {item.title}
                       </AppText>
                       <View style={styles.divider} />
-                      <AppText style={styles.subtitle} numberOfLines={1}>
-                        지금 진행중
-                      </AppText>
+                      <View style={styles.badge}>
+                        <View style={styles.badgeDot} />
+                        <AppText style={styles.badgeText}>진행중</AppText>
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -138,25 +139,22 @@ const OngoingSquareSlider = ({ data }: Props) => {
         }}
       />
 
-      {/* 💫 Indicator */}
-      <View style={styles.indicatorContainer}>
-        <View style={styles.indicatorRow}>
-          {sliderData.map((_, idx) => {
-            const isActive = idx === currentIndex;
-            const distance = Math.abs(idx - currentIndex);
-
-            return (
-              <View
-                key={idx}
-                style={[
-                  styles.indicator,
-                  isActive && styles.indicatorActive,
-                  distance === 1 && styles.indicatorAdjacent,
-                ]}
-              />
-            );
-          })}
-        </View>
+      {/* 💫 하단 인디케이터 */}
+      <View style={styles.paginationContainer}>
+        {sliderData.map((_, idx) => {
+          const isActive = idx === currentIndex;
+          return (
+            <View
+              key={idx}
+              style={[
+                styles.paginationDot,
+                isActive
+                  ? styles.paginationDotActive
+                  : styles.paginationDotInactive,
+              ]}
+            />
+          );
+        })}
         {/*<AppText style={styles.pageCounter}>*/}
         {/*  {currentIndex + 1} / {sliderData.length}*/}
         {/*</AppText>*/}
@@ -266,40 +264,55 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
 
-  /* 🔵 인디케이터 */
-  indicatorContainer: {
+  /* 🟢 배지 */
+  badge: {
+    flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    alignSelf: "flex-start",
+    backgroundColor: "rgba(255, 255, 255, 0.25)",
+    backdropFilter: "blur(10px)",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.4)",
   },
-  indicatorRow: {
+  badgeDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: "#22c55e",
+    shadowColor: "#22c55e",
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 4,
+  },
+  badgeText: {
+    color: "#ffffff",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0.3,
+  },
+
+  /* 💫 인디케이터 */
+  paginationContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     gap: 8,
   },
-  indicator: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
+  paginationDot: {
+    height: 4,
+    borderRadius: 2,
+  },
+  paginationDotActive: {
+    width: 24,
+    backgroundColor: "#ffffff",
+  },
+  paginationDotInactive: {
+    width: 4,
     backgroundColor: "rgba(255, 255, 255, 0.3)",
-    opacity: 0.4,
-  },
-  indicatorAdjacent: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    opacity: 0.6,
-  },
-  indicatorActive: {
-    width: 28,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#3b82f6",
-    opacity: 1,
-    shadowColor: "#3b82f6",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.6,
-    shadowRadius: 6,
   },
   // pageCounter: {
   //   color: "rgba(255, 255, 255, 0.6)",
