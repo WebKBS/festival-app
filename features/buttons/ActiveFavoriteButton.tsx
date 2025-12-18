@@ -1,6 +1,6 @@
 import { Animated, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useRef } from "react";
+import { startTransition, useOptimistic, useRef } from "react";
 import { DetailInfo } from "@/types/detail.types";
 import HapticsButton from "@/features/buttons/HapticsButton";
 import { createFavorites, deleteFavorite } from "@/db/watch-list";
@@ -25,6 +25,7 @@ const ActiveFavoriteButton = ({
 }: ActiveFavoriteButtonProps) => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
+  /** DB 상태 */
   const favoriteQuery = db
     .select()
     .from(watchListTable)
@@ -33,11 +34,20 @@ const ActiveFavoriteButton = ({
   const { data } = useLiveQuery(favoriteQuery);
   const isFavorite = (data?.length || 0) > 0;
 
+  const [optimisticFavorite, setOptimisticFavorite] = useOptimistic(
+    isFavorite,
+    (_, next: boolean) => next,
+  );
+
   const toggleFavorite = async () => {
+    const nextState = !optimisticFavorite;
+
+    startTransition(() => {
+      setOptimisticFavorite(nextState);
+    });
+
     try {
-      if (isFavorite) {
-        await deleteFavorite(contentId);
-      } else {
+      if (nextState) {
         await createFavorites({
           title: festival.title || "",
           contentid: contentId,
@@ -48,16 +58,15 @@ const ActiveFavoriteButton = ({
           tel: festival.tel || "",
           firstimage: festival.firstimage || "",
         });
+      } else {
+        await deleteFavorite(contentId);
       }
 
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch (err) {
-      console.error(
-        isFavorite ? "Error removing favorite:" : "Error adding favorite:",
-        err,
-      );
+    } catch (error) {
+      console.error("Favorite toggle failed:", error);
     }
-    // 애니메이션 효과
+
     Animated.sequence([
       Animated.timing(scaleAnim, {
         toValue: 1.2,
@@ -78,15 +87,15 @@ const ActiveFavoriteButton = ({
         style={({ pressed }) => [
           styles.button,
           styles.likeButton,
-          isFavorite && styles.likedButton,
+          optimisticFavorite && styles.likedButton,
           { opacity: pressed ? 0.8 : 1 },
         ]}
         onPress={toggleFavorite}
       >
         <MaterialIcons
-          name={isFavorite ? "favorite" : "favorite-border"}
+          name={optimisticFavorite ? "favorite" : "favorite-border"}
           size={22}
-          color={isFavorite ? "#FF3B30" : "#a1a1a1"}
+          color={optimisticFavorite ? "#FF3B30" : "#a1a1a1"}
         />
       </HapticsButton>
     </Animated.View>

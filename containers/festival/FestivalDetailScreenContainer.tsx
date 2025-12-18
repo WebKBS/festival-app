@@ -198,7 +198,9 @@ const FestivalDetailScreenContainer = ({
           <View style={styles.card}>
             <View style={styles.cardHeader}>
               <AppText style={styles.cardIcon}>📝</AppText>
-              <AppText style={styles.cardTitle}>축제 개요</AppText>
+              <AppText style={styles.cardTitle} weight={"bold"}>
+                축제 개요
+              </AppText>
             </View>
             <View style={styles.overviewContainer}>
               <View
@@ -228,7 +230,9 @@ const FestivalDetailScreenContainer = ({
           <View style={styles.card}>
             <View style={styles.cardHeader}>
               <AppText style={styles.cardIcon}>📅</AppText>
-              <AppText style={styles.cardTitle}>축제 기간</AppText>
+              <AppText style={styles.cardTitle} weight={"bold"}>
+                축제 기간
+              </AppText>
             </View>
             <View style={styles.overviewContainer}>
               {introData.eventstartdate && introData.eventenddate ? (
@@ -255,7 +259,9 @@ const FestivalDetailScreenContainer = ({
           <View style={styles.card}>
             <View style={styles.cardHeader}>
               <AppText style={styles.cardIcon}>📍</AppText>
-              <AppText style={styles.cardTitle}>위치 정보</AppText>
+              <AppText style={styles.cardTitle} weight={"bold"}>
+                위치 정보
+              </AppText>
               {detailData.addr1 || detailData.addr2 ? (
                 <CopyAddressButton
                   address={detailData.addr1}
@@ -294,6 +300,7 @@ const FestivalDetailScreenContainer = ({
               <View style={styles.cardHeader}>
                 <AppText style={styles.cardIcon}>📞</AppText>
                 <AppText
+                  weight={"bold"}
                   style={styles.cardTitle}
                   lineBreakStrategyIOS={"hangul-word"}
                 >
