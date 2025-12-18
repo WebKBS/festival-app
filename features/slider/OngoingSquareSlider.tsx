@@ -118,6 +118,11 @@ const OngoingSquareSlider = ({ data }: Props) => {
                   {/* 제목 영역 */}
                   <View style={styles.titleContainer}>
                     <View style={styles.titleCard}>
+                      <View style={styles.badge}>
+                        <View style={styles.badgeDot} />
+                        <AppText style={styles.badgeText}>진행중</AppText>
+                      </View>
+                      <View style={styles.divider} />
                       <AppText
                         style={styles.title}
                         numberOfLines={2}
@@ -125,11 +130,6 @@ const OngoingSquareSlider = ({ data }: Props) => {
                       >
                         {item.title}
                       </AppText>
-                      <View style={styles.divider} />
-                      <View style={styles.badge}>
-                        <View style={styles.badgeDot} />
-                        <AppText style={styles.badgeText}>진행중</AppText>
-                      </View>
                     </View>
                   </View>
                 </View>
